@@ -10,10 +10,12 @@ static void die(const char *s);
 
 int main(int argc, char *argv[]) {
   int i;
+  // 引数がなければエラー
   if (argc < 2) {
     fprintf(stderr, "%s: file name not given\n", argv[0]);
     exit(1);
   }
+  // 引数ごとにcat
   for (i = 1; i < argc; i++) {
     do_cat(argv[i]);
   }
@@ -27,11 +29,16 @@ static void do_cat(const char *path) {
   unsigned char buf[BUFFER_SIZE];
   int n;
 
+  // ファイルを開く
   fd = open(path, O_RDONLY);
-  if (fd < 0)
+
+  // ファイルオープン失敗
+  if (fd < 0) {
     die(path);
+  }
   for (;;) {
-    n = read(fd, buf, sizeof buf);
+    // ファイルディスクリプタから sizeof buf 分のデータを読み込み、bufに格納
+    n = read(fd, buf, sizeof buf); // n = 読み込んだバイト数, buf = データ保存領域のポインタ
     if (n < 0)
       die(path);
     if (n == 0)
@@ -39,8 +46,9 @@ static void do_cat(const char *path) {
     if (write(STDOUT_FILENO, buf, n) < 0)
       die(path);
   }
-  if (close(fd) < 0)
+  if (close(fd) < 0) {
     die(path);
+  }
 }
 
 static void die(const char *s) {

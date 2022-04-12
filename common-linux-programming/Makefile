@@ -1,3 +1,4 @@
 # Compile .c file.
 %:
-	@gcc $@.c -ansi -Wall -O2 -o $@.o
+	@rm -f $@.o
+	@gcc $@.c -g -Wall -Wno-parentheses -o $@.o
